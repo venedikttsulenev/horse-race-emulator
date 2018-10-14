@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--suppress SpringFacetInspection -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="appBean" class="HorseRaceEmulatorApp">
+        <constructor-arg type="service.HorseService" ref="horseService"/>
+        <constructor-arg type="service.RaceService" ref="raceService"/>
+        <constructor-arg type="service.EmulationService" ref="emulationService"/>
+        <constructor-arg type="java.io.BufferedReader" ref="bufferedReader"/>
+        <constructor-arg type="java.io.PrintStream" ref="printStream"/>
+    </bean>
+
+    <bean id="printStream" class="java.io.PrintStream">
+        <constructor-arg type="java.io.OutputStream">
+            <util:constant static-field="java.lang.System.out"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="bufferedReader" class="java.io.BufferedReader">
+        <constructor-arg type="java.io.Reader">
+            <bean class="java.io.InputStreamReader">
+                <constructor-arg type="java.io.InputStream">
+                    <util:constant static-field="java.lang.System.in"/>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="horseService" class="service.HorseService">
+        <constructor-arg name="horses">
+            <list value-type="model.Horse">
+                <ref bean="abbervailDreamHorse"/>
+                <ref bean="adagioHorse"/>
+                <ref bean="krasavchikHorse"/>
+                <ref bean="genericHorse"/>
+                <ref bean="afternoonDelightHorse"/>
+                <ref bean="palHorse"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="raceService" class="service.RaceService">
+        <constructor-arg name="distance" value="50"/>
+        <constructor-arg type="service.HorseService" ref="horseService"/>
+    </bean>
+
+    <bean id="emulationService" class="service.EmulationService">
+        <constructor-arg type="java.io.PrintStream" ref="printStream"/>
+        <constructor-arg name="velocityVariance" value="0.1"/>
+        <constructor-arg name="drawStep" value="1.0"/>
+    </bean>
+
+    <bean id="mustangBreed" class="model.Breed">
+        <property name="name" value="Mustang"/>
+        <property name="color" value="Coat color"/>
+        <property name="countryOfOrigin" value="North America"/>
+    </bean>
+
+    <bean id="americanSaddlebredBreed" class="model.Breed">
+        <property name="name" value="American Saddlebred"/>
+        <property name="color" value="Any"/>
+        <property name="countryOfOrigin" value="United States of America (Kentucky)"/>
+    </bean>
+
+    <bean id="americanWarmbloodBreed" class="model.Breed">
+        <property name="name" value="American Warmblood"/>
+        <property name="color" value="Any"/>
+        <property name="countryOfOrigin" value="United States of America"/>
+    </bean>
+
+    <bean id="russianDonBreed" class="model.Breed">
+        <property name="name" value="Russian Don"/>
+        <property name="color" value="Bay, black, gray or chestnut"/>
+        <property name="countryOfOrigin" value="Russian Federation"/>
+    </bean>
+
+    <bean id="sokolskiBreed" class="model.Breed">
+        <property name="name" value="Sokolski Horse"/>
+        <property name="color" value="Chestnut"/>
+        <property name="countryOfOrigin" value="Poland"/>
+    </bean>
+
+    <bean id="panRider" class="model.Rider">
+        <property name="name" value="Pan Mateusz Nowak"/>
+        <property name="uniformColor" value="White and red"/>
+    </bean>
+
+    <bean id="johnDaleRider" class="model.Rider">
+        <property name="name" value="John Dale"/>
+        <property name="uniformColor" value="Black"/>
+    </bean>
+
+    <bean id="bobDylanRider" class="model.Rider">
+        <property name="name" value="Bob Dylan"/>
+        <property name="uniformColor" value="White"/>
+    </bean>
+
+    <bean id="genericRider" class="model.Rider">
+        <property name="name" value="Generic Name"/>
+        <property name="uniformColor" value="Generic"/>
+    </bean>
+
+    <bean id="dirtySanchezRider" class="model.Rider">
+        <property name="name" value="Dirty Sanchez"/>
+        <property name="uniformColor" value="Dirty"/>
+    </bean>
+
+    <bean id="igorUkrainetsRider" class="model.Rider">
+        <property name="name" value="Igor Ukrainets"/>
+        <property name="uniformColor" value="Blue and yellow"/>
+    </bean>
+
+    <bean id="abbervailDreamHorse" class="model.Horse">
+        <property name="name" value="Abbervail Dream"/>
+        <property name="number" value="1"/>
+        <property name="velocity" value="1.2"/>
+        <property name="breed" ref="mustangBreed"/>
+        <property name="rider" ref="dirtySanchezRider"/>
+    </bean>
+
+    <bean id="adagioHorse" class="model.Horse">
+        <property name="name" value="Adagio"/>
+        <property name="number" value="2"/>
+        <property name="velocity" value="1.1"/>
+        <property name="breed" ref="americanSaddlebredBreed"/>
+        <property name="rider" ref="bobDylanRider"/>
+    </bean>
+
+    <bean id="krasavchikHorse" class="model.Horse">
+        <property name="name" value="Krasavchik"/>
+        <property name="number" value="3"/>
+        <property name="velocity" value="1.0"/>
+        <property name="breed" ref="russianDonBreed"/>
+        <property name="rider" ref="igorUkrainetsRider"/>
+    </bean>
+
+    <bean id="genericHorse" class="model.Horse">
+        <property name="name" value="Generic"/>
+        <property name="number" value="4"/>
+        <property name="velocity" value="1.05"/>
+        <property name="breed" ref="mustangBreed"/>
+        <property name="rider" ref="genericRider"/>
+    </bean>
+
+    <bean id="afternoonDelightHorse" class="model.Horse">
+        <property name="name" value="Afternoon Delight"/>
+        <property name="number" value="5"/>
+        <property name="velocity" value="0.95"/>
+        <property name="breed" ref="americanWarmbloodBreed"/>
+        <property name="rider" ref="johnDaleRider"/>
+    </bean>
+
+    <bean id="palHorse" class="model.Horse">
+        <property name="name" value="Pal"/>
+        <property name="number" value="6"/>
+        <property name="velocity" value="0.98"/>
+        <property name="breed" ref="sokolskiBreed"/>
+        <property name="rider" ref="panRider"/>
+    </bean>
+
+</beans>
