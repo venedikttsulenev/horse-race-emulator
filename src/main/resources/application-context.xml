@@ -44,14 +44,15 @@
     </bean>
 
     <bean id="raceService" class="service.RaceService">
-        <constructor-arg name="distance" value="50"/>
+        <constructor-arg name="distance" value="100"/>
         <constructor-arg type="service.HorseService" ref="horseService"/>
     </bean>
 
     <bean id="emulationService" class="service.EmulationService">
         <constructor-arg type="java.io.PrintStream" ref="printStream"/>
-        <constructor-arg name="velocityVariance" value="0.1"/>
+        <constructor-arg name="velocityVariance" value="0.3"/>
         <constructor-arg name="drawStep" value="1.0"/>
+        <constructor-arg name="sleepTime" value="300"/>
     </bean>
 
     <bean id="mustangBreed" class="model.Breed">
@@ -117,7 +118,7 @@
     <bean id="abbervailDreamHorse" class="model.Horse">
         <property name="name" value="Abbervail Dream"/>
         <property name="number" value="1"/>
-        <property name="velocity" value="1.2"/>
+        <property name="velocity" value="1.15"/>
         <property name="breed" ref="mustangBreed"/>
         <property name="rider" ref="dirtySanchezRider"/>
     </bean>
@@ -125,7 +126,7 @@
     <bean id="adagioHorse" class="model.Horse">
         <property name="name" value="Adagio"/>
         <property name="number" value="2"/>
-        <property name="velocity" value="1.1"/>
+        <property name="velocity" value="1.08"/>
         <property name="breed" ref="americanSaddlebredBreed"/>
         <property name="rider" ref="bobDylanRider"/>
     </bean>
@@ -133,7 +134,7 @@
     <bean id="krasavchikHorse" class="model.Horse">
         <property name="name" value="Krasavchik"/>
         <property name="number" value="3"/>
-        <property name="velocity" value="1.0"/>
+        <property name="velocity" value="1.03"/>
         <property name="breed" ref="russianDonBreed"/>
         <property name="rider" ref="igorUkrainetsRider"/>
     </bean>

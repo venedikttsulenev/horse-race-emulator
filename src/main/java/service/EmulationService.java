@@ -16,12 +16,14 @@ public class EmulationService {
     private final PrintStream output;
     private final Double velocityVariance;
     private final Double drawStep;
+    private final long sleepTime;
 
     @RequiredArgsConstructor
     private class RaceHorseRecord implements Comparable<RaceHorseRecord> {
 
         public final Horse horse;
         private double distanceTravelled = 0;
+        private boolean finished = false;
 
         @Override
         public int compareTo(RaceHorseRecord r) {
@@ -46,7 +48,7 @@ public class EmulationService {
 
     private RaceHorseRecord findHorseAt(double distance, List<RaceHorseRecord> participants) {
         for (RaceHorseRecord p : participants) {
-            if (p.distanceTravelled >= distance - 0.5 * drawStep
+            if (!p.finished && p.distanceTravelled >= distance - 0.5 * drawStep
                 && p.distanceTravelled < distance + 0.5 * drawStep) {
                 return p;
             }
@@ -56,10 +58,10 @@ public class EmulationService {
 
     private void printCurrentState(List<RaceHorseRecord> participants, Race race, Horse betHorse) {
         clearLine();
-        for (double d = 0; d < Math.max(participants.get(0).distanceTravelled, race.getDistance()) + 0.5*drawStep; d += drawStep) {
+        for (double d = 0; d < race.getDistance() + 0.5 * drawStep; d += drawStep) {
             RaceHorseRecord r = findHorseAt(d, participants);
             if (r == null) {
-                if (Math.abs(race.getDistance() - d) < 0.5*drawStep) {
+                if (Math.abs(race.getDistance() - d) < 0.5 * drawStep) {
                     output.print('|');
                 } else {
                     output.print('.');
@@ -86,22 +88,29 @@ public class EmulationService {
         List<RaceHorseRecord> participants = race.getParticipants().stream()
             .map(RaceHorseRecord::new)
             .collect(Collectors.toCollection(() -> new ArrayList<>(race.getParticipants().size())));
+        List<RaceHorseRecord> finalStandings = new ArrayList<>(participants.size());
         ThreadLocalRandom random = ThreadLocalRandom.current();
         while (getLastElement(participants).distanceTravelled < race.getDistance()) {
             for (RaceHorseRecord p : participants) {
-                p.distanceTravelled += p.horse.getVelocity() + random
-                    .nextDouble(-velocityVariance, velocityVariance);
+                if (!p.finished) {
+                    p.distanceTravelled += p.horse.getVelocity() + random.
+                        nextGaussian() * velocityVariance;
+                    if (p.distanceTravelled > race.getDistance()) {
+                        p.finished = true;
+                        finalStandings.add(p);
+                    }
+                }
             }
             participants.sort(Comparator.naturalOrder());
             printCurrentState(participants, race, betHorse);
             try {
-                Thread.sleep(960L);
+                Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        printFinalStandings(participants);
+        printFinalStandings(finalStandings);
 
-        return participants.get(0).horse;
+        return finalStandings.get(0).horse;
     }
 }
