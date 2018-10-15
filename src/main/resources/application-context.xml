@@ -6,7 +6,7 @@
     xmlns:util="http://www.springframework.org/schema/util"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <bean id="appBean" class="HorseRaceEmulatorApp">
+    <bean id="appBean" class="app.HorseRaceEmulatorApp">
         <constructor-arg type="service.HorseService" ref="horseService"/>
         <constructor-arg type="service.RaceService" ref="raceService"/>
         <constructor-arg type="service.EmulationService" ref="emulationService"/>
