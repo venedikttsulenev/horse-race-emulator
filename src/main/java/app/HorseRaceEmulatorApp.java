@@ -1,3 +1,6 @@
+package app;
+
+import configuration.AppConfiguration;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -5,8 +8,7 @@ import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import model.Horse;
 import model.Race;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import service.EmulationService;
 import service.HorseService;
 import service.RaceService;
@@ -15,7 +17,8 @@ import service.RaceService;
 public class HorseRaceEmulatorApp {
 
     public static void main(String[] args) throws IOException {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("application-context.xml");
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(
+            AppConfiguration.class);
         HorseRaceEmulatorApp app = applicationContext.getBean(HorseRaceEmulatorApp.class);
         app.run(args);
     }
